@@ -8,8 +8,8 @@ var level = 0;
 function nextSequence() {
   var randomChosenColour = buttonColors[Math.floor(Math.random() * 4)];
   gamePattern.push(randomChosenColour);
-  console.log("Game Sequence ----> ");
-  console.log(gamePattern);
+  // console.log("Game Sequence ----> ");
+  // console.log(gamePattern);
   return randomChosenColour;
 }
 
@@ -62,24 +62,25 @@ $(document).on("keypress", function() {
 });
 
 $(".btn").on("click", function() {
-  userClickedPattern.push(this.id);
-  flash(this.id);
-  // $("#"+this.id).addClass("pressed");
-  // setTimeout(function(){
-  //   $("#"+this.id).removeClass("pressed");
-  // },200);
-  // console.log("User Sequence ----> ");
-  // console.log(userClickedPattern);
-  if (buttonCheck()) {
-    sound(this.id);
-    if (levelComplete()) {
+  if(level>0){
+    userClickedPattern.push(this.id);
+    flash(this.id);
+
+    if (buttonCheck()) {
+      sound(this.id);
+      if (levelComplete()) {
+        setTimeout(function(){
+          nextLevel();
+        },500);
+      }
+    } else {
+      sound("wrong");
+      changeH1("You Lose at Level: "+level+". Press Any Key to Restart!")
+      $("body").css("background-color","red");
       setTimeout(function(){
-        nextLevel();
-      },500);
+        $("body").css("background-color","#011F3F");
+      },200);
+      level = 0;
     }
-  } else {
-    sound("wrong");
-    changeH1("You Lose at Level: "+level+". Press Any Key to Restart")
-    level = 0;
   }
 });
